@@ -23,3 +23,4 @@
 *.tgz
 
 Chart.lock
+.idea/
