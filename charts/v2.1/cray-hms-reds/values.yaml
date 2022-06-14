@@ -8,15 +8,18 @@
 #   pullPolicy: "" (default = "IfNotPresent")
 
 global:
-  appVersion: "1.22.0"
-  testVersion: 1.22.0
-tests:
-  image:
-    repository: artifactory.algol60.net/csm-docker/stable/cray-reds-test
-    pullPolicy: IfNotPresent
+  appVersion: 1.22.0
+  #testVersion: 1.22.0
+  testVersion: 1.22.0-20220614223047.b889e4c
+
 image:
   repository: artifactory.algol60.net/csm-docker/stable/cray-reds
   pullPolicy: IfNotPresent
+
+tests:
+  image:
+    repository: artifactory.algol60.net/csm-docker/stable/cray-reds-test
+    pullPolicy: Always
 
 # Version of the kubectl pod to use when upgrading/downgrading charts
 kubectl:
