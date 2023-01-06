@@ -49,10 +49,10 @@ cray-service:
       image:
         repository: artifactory.algol60.net/csm-docker/stable/cray-reds
       env:
-        - name: ETCD_HOST
-          value: cray-reds-etcd-client
-        - name: ETCD_PORT
-          value: "2379"
+#        - name: ETCD_HOST
+#          value: cray-reds-etcd-client
+#        - name: ETCD_PORT
+#          value: "2379"
         - name: DATASTORE_URL
           value: $(ETCD_HOST):$(ETCD_PORT)
         - name: HSM_URL
