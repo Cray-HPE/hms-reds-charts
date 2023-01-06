@@ -8,8 +8,8 @@
 #   pullPolicy: "" (default = "IfNotPresent")
 
 global:
-  appVersion: 1.24.0
-  testVersion: 1.24.0
+  appVersion: 2.0.0
+  testVersion: 2.0.0
 
 image:
   repository: artifactory.algol60.net/csm-docker/stable/cray-reds
@@ -29,49 +29,27 @@ kubectl:
 
 hms_ca_uri: ""
 
-cray-etcd-base:
-  nameOverride: "cray-reds"
-  fullnameOverride: "cray-reds"
-  etcd:
-    enabled: true
-    fullnameOverride: "cray-reds-etcd"
-    nameOverride: "cray-reds-etcd"
 
 cray-service:
   type: "Deployment"
   nameOverride: "cray-reds"
   fullnameOverride: "cray-reds"
   serviceAccountName: "jobs-watcher"
-  etcdWaitContainer: true
   containers:
     cray-reds:
       name: "cray-reds"
       image:
         repository: artifactory.algol60.net/csm-docker/stable/cray-reds
       env:
-#        - name: ETCD_HOST
-#          value: cray-reds-etcd-client
-#        - name: ETCD_PORT
-#          value: "2379"
-        - name: DATASTORE_URL
-          value: $(ETCD_HOST):$(ETCD_PORT)
         - name: HSM_URL
           value: http://cray-smd/hsm/v2
-        - name: REDS_BYPASS_SWITCH_BLACKLIST_PANIC
-          value: ""
+
         - name: VAULT_ADDR
           value: "http://cray-vault.vault:8200"
         - name: VAULT_SKIP_VERIFY
           value: "true"
         - name: SLS_ADDR
           value: "cray-sls/v1"
-        - name: REDS_SYSLOG_TARG
-          value: "rsyslog-aggregator.hmnlb:514"
-        - name: REDS_NTP_TARG
-          valueFrom:
-            configMapKeyRef:
-              name: meds-nwproto-info
-              key: NTP_HOST
         - name: REDS_CA_URI
           valueFrom:
             configMapKeyRef:
@@ -90,7 +68,7 @@ cray-service:
         initialDelaySeconds: 5
         periodSeconds: 10
       command: ["/bin/sh", "-c"]
-      args: ["until curl --head localhost:15000 ; do echo Waiting for Sidecar; sleep 3 ; done ; echo Sidecar available; reds $REDS_OPTS $( [ -n \"$HSM_URL\" ] && echo --hsm=$HSM_URL ) --datastore=$DATASTORE_URL -syslog \"$REDS_SYSLOG_TARG\" -ntp \"$REDS_NTP_TARG\" -sls \"$SLS_ADDR\""]
+      args: ["until curl --head localhost:15000 ; do echo Waiting for Sidecar; sleep 3 ; done ; echo Sidecar available; reds $REDS_OPTS $( [ -n \"$HSM_URL\" ] && echo --hsm=$HSM_URL ) -sls \"$SLS_ADDR\""]
       ports:
         - name: http
           containerPort: 8269
