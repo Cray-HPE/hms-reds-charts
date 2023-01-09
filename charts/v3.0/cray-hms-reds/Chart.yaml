@@ -9,9 +9,6 @@ dependencies:
   - name: cray-service
     version: "~9.0.0"
     repository: https://artifactory.algol60.net/artifactory/csm-helm-charts
-  - name: cray-etcd-base
-    version: "~1.0.0"
-    repository: https://artifactory.algol60.net/artifactory/csm-helm-charts
 maintainers:
   - name: Hardware Management
     url: https://github.com/orgs/Cray-HPE/teams/hardware-management
